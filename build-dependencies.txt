@@ -1,0 +1,5 @@
+gcc
+patch
+make
+python-dev
+libpq-dev

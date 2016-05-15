@@ -1,0 +1,112 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}'>
+        <link rel="stylesheet" href='{% static "css/custom.css" %}'>
+    </head>
+    <body>        
+        <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <!-- Menú visible en resoluciones más chicas -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/"><img src='{% static "img/logo_small.png" %}'></a>
+            </div>
+            <!-- Menú -->
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user }}<span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="/admin" ><i class="fa fa-sign-out"></i>Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>cerrar sesión</a></li>
+                      </ul>
+                    </li>                    
+                </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="container">
+            <table class="datatable noSorting">
+              <thead>
+                <tr>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Cliente</th>
+                  <th>Falla</th>
+                  <th>Fecha de ingreso</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for trabajo in trabajos_list %}
+                <tr>
+                  <td>{{ trabajo.equipo.marca }}</td>
+                  <td>{{ trabajo.equipo.modelo }}</td>
+                  <td>{{ trabajo.cliente }}</td>
+                  <td>{{ trabajo.falla_segun_cliente }}</td>
+                  <td>{{ trabajo.fecha_de_ingreso }}</td>
+                  <td>{% if trabajo.estado %}{{ trabajo.estado }}{% else %}(No definido){% endif %}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.1.0/js/buttons.print.min.js "></script>        
+        <script>
+            $(document).ready(function() {
+                $('.datatable').DataTable({
+                    columnDefs: [
+                        { "className": "dt-body-center", "targets": [ 4, 5 ] }
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sSearch": "Filtrar:",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    },
+                    dom: 'lBfrtip',
+                    buttons: [
+                        {
+                            extend: 'print',
+                            text: 'Imprimir',
+                            customize: function ( win ) {
+                                $(win.document.body)
+                                    .css( 'font-size', '10pt' );
+
+                                $(win.document.body).find( 'table' )
+                                    .addClass( 'compact' )
+                                    .css( 'font-size', 'inherit' );
+                            }
+                        }
+                    ]
+                });
+            });
+        </script>
+    </body>
+</html>

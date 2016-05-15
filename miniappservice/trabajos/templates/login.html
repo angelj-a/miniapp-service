@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<html>
+<!--
+    Adaptado de https://getbootstrap.com/examples/signin/
+-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <link rel="stylesheet" href='{% static "css/signin.css" %}'>
+        <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}'>
+    </head>
+    <body>
+       <div class="container">
+          <form class="form-signin" action="{% url 'login' %}" method="post">
+          {% if next %}
+            <input type="hidden" name="next" value="{{ next }}" />
+          {% endif %}              
+          {% csrf_token %}
+            <h2 class="form-signin-heading text-center">Zona Tecno</h2>
+            <label for="inputUser" class="sr-only">Usuario</label>
+            <input type="text" id="inputUser" class="form-control" name="username" placeholder="Usuario" required autofocus>
+            <label for="inputPassword" class="sr-only">Contraseña</label>
+            <input type="password" id="inputPassword" name="password" placeholder="Contraseña" class="form-control" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesión</button>
+          </form>
+        </div>
+    </body>
+</html>
